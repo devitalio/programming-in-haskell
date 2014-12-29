@@ -102,9 +102,17 @@ merges two sorted lists to give a single sorted list. For example:
 >merge[2,5,6] [1,3,4]
 [1,2,3,4,5,6]
 Note: your definition should not use other functions on sorted lists such as
-insert orisort, but should be defined using explicit recursion
+insert or isort, but should be defined using explicit recursion
 -}
-
+merge::Ord a =>[a]->[a]->[a]
+merge [] [x] = [x]
+merge [x] [] = [x]
+merge [x] [y] | x < y = [x,y]
+              | otherwise = [y,x]
+merge (x:xs) (y:ys) | x < y && x < ys!!0 = x : y : merge xs ys
+                    | x < y && x > ys!!0 = x : xs!!0 : y : merge xs (tail ys)
+                    | y < x && y < xs!!0 = y : x : merge ys xs
+                    | y < x && y > xs!!0 = y : ys!!0 : x : merge xs (tail xs)
  
 
 
