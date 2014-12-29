@@ -97,22 +97,37 @@ elem' z (x:xs) | z == x = True
                
 {-
 4.Define a recursive function
-merge::Ord a⇒[a]→[a]→[a] that
+merge::Ord a => [a]->[a]->[a] that
 merges two sorted lists to give a single sorted list. For example:
 >merge[2,5,6] [1,3,4]
 [1,2,3,4,5,6]
 Note: your definition should not use other functions on sorted lists such as
 insert or isort, but should be defined using explicit recursion
 -}
+
+-- helper that determines if element is not in list
+notIn :: Eq a => a -> [a] -> Bool
+notIn x [] = True
+notIn x (y:ys) | x == y = False
+               | otherwise = notIn x ys
+
+--helper that returns list without elements in second list
+without :: Eq a => [a]->[a]->[a]
+without [] [] = []
+without [x] [] = [x]
+without [] [x] = [x]
+without [] (xs) = xs
+without xs ys = [x | x <- xs, x `notIn` ys]
+                  
+
 merge::Ord a =>[a]->[a]->[a]
 merge [] [x] = [x]
 merge [x] [] = [x]
-merge [x] [y] | x < y = [x,y]
-              | otherwise = [y,x]
-merge (x:xs) (y:ys) | x < y && x < ys!!0 = x : y : merge xs ys
-                    | x < y && x > ys!!0 = x : xs!!0 : y : merge xs (tail ys)
-                    | y < x && y < xs!!0 = y : x : merge ys xs
-                    | y < x && y > xs!!0 = y : ys!!0 : x : merge xs (tail xs)
+merge [] (ys) = ys
+merge (x:xs) (y:ys) | x < y =  ([x] ++ smaller ++ [y])++merge (xs `without` smaller) ys      --smaller than y
+                    | otherwise = ([y] ++ smaller' ++[x])++merge xs (ys `without` smaller')  --smaller than x                    
+                        where smaller = [a | a <- xs, a <= y]
+                              smaller' = [a | a <- ys, a <= x]
  
 
 
