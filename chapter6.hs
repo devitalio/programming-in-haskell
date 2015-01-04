@@ -139,3 +139,29 @@ merge xs [] = xs
 merge (x:xs) (y:ys) = if x <= y then x: merge xs (y:ys)
 								else y: merge (x:xs) ys
 
+
+{--
+5.Using merge, define a recursive function msort::Ord a=>[a]->[a] that
+implements merge sort, in which the empty list and singleton lists are 
+already sorted, and any other list is sorted by merging together the two
+lists that result from sorting the two halves of the list separately.
+
+Hint: first define a function
+halve :: [a] -> [([a],[a])] that splits a list into two halves whose 
+lengths differ by at most one.
+--}
+halve :: [a] -> ([a],[a])
+halve xs = (take halfOf xs, drop halfOf xs)
+			where halfOf = length xs `div` 2
+								
+msort::Ord a=>[a]->[a]
+msort [] = []
+msort [x] = [x]
+msort [x,y]  | x < y = [x,y]
+			 | otherwise = [y,x] 
+msort xs = merge (msort (fst (halve xs))) ( msort (snd (halve xs)))
+								
+								
+								
+								
+								
