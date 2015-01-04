@@ -106,12 +106,15 @@ insert or isort, but should be defined using explicit recursion
 -}
 
 -- helper that determines if element is not in list
+{---
 notIn :: Eq a => a -> [a] -> Bool
 notIn x [] = True
 notIn x (y:ys) | x == y = False
                | otherwise = notIn x ys
+---}
 
 --helper that returns list without elements in second list
+{---
 without :: Eq a => [a]->[a]->[a]
 without [] [] = []
 without [x] [] = [x]
@@ -128,7 +131,11 @@ merge (x:xs) (y:ys) | x < y =  ([x] ++ smaller ++ [y])++merge (xs `without` smal
                     | otherwise = ([y] ++ smaller' ++[x])++merge xs (ys `without` smaller')  --smaller than x                    
                         where smaller = [a | a <- xs, a <= y]
                               smaller' = [a | a <- ys, a <= x]
- 
-
-
+---}
+{- merge from solution -}
+merge::Ord a =>[a]->[a]->[a]
+merge [] ys = ys
+merge xs [] = xs
+merge (x:xs) (y:ys) = if x <= y then x: merge xs (y:ys)
+								else y: merge (x:xs) ys
 
