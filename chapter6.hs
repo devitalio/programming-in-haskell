@@ -160,8 +160,24 @@ msort [x] = [x]
 msort [x,y]  | x < y = [x,y]
 			 | otherwise = [y,x] 
 msort xs = merge (msort (fst (halve xs))) ( msort (snd (halve xs)))
-								
-								
-								
-								
+
+{-
+6.Using the five-step process, define the library functions that 
+calculate the sum of a list of numbers,
+take a given number of elements from the start of a list,
+and select the last element of a non-empty list.
+-}
+sum' :: Num a => [a] -> a
+sum' [] = 0
+sum' [x] = x
+sum' (x:xs) = x + sum xs
+
+take' :: Int -> [b] -> [b]							
+take' _ [] = []
+take' 1 (x:xs) = [x]
+take' n (x:xs) = x : (take' (n-1) xs)								
+	
+last' :: [a] -> a	
+last' (x:xs) = if length (x:xs) > 1 then last' xs
+								else x
 								
